@@ -10,6 +10,15 @@ public class PlayerMovement : MonoBehaviour
     public float MovementSpeed;
     public float JumpSpeed;
 
+    [Header("Ground Check Values")]
+    public Transform GroundCheckPosition;
+    public float GroundCheckRadius;
+    public LayerMask GroundMask;
+
+    [Header("Testing")]
+    public bool Grounded;
+    //true to use WASD; false to Use Arrows
+    public bool WASD; 
 
     //componenets
     public PlayerInputActions Inputs;
@@ -33,7 +42,10 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Grounded = Physics2D.OverlapCircle(GroundCheckPosition.position, GroundCheckRadius, GroundMask);
         MovePlayer();
+
+
     }
 
 
@@ -41,13 +53,15 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 rawInput = _move.ReadValue<Vector2>();
         _directionalInput = new Vector2(System.MathF.Sign(rawInput.x), System.MathF.Sign(rawInput.y));
-
         _rb.velocity = new Vector2(_directionalInput.x * MovementSpeed, _rb.velocity.y);
     }
 
     private void OnEnable()
     {
-        _move = Inputs.Player.Move;
+        if (WASD)
+            _move = Inputs.Player.WASDMove;
+        else
+            _move = Inputs.Player.ArrowMove;    
         _move.Enable();
     }
 
