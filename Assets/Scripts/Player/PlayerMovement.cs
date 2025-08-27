@@ -7,7 +7,8 @@ public class PlayerMovement : MonoBehaviour
 {
 
     [Header("Movement Values")]
-    public float MovementSpeed;
+    public float MaxMovementSpeed;
+    public float HorizontalMovementForce;
     public float JumpSpeed;
 
     [Header("Ground Check Values")]
@@ -27,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
     //input actions
     private InputAction _move;
+    private InputAction _jump;
     
     // Start is called before the first frame update
     void Start()
@@ -53,7 +55,16 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 rawInput = _move.ReadValue<Vector2>();
         _directionalInput = new Vector2(System.MathF.Sign(rawInput.x), System.MathF.Sign(rawInput.y));
-        _rb.velocity = new Vector2(_directionalInput.x * MovementSpeed, _rb.velocity.y);
+        if(Mathf.Abs(_rb.velocity.x) < MaxMovementSpeed)
+        {
+            _rb.AddForce(new Vector2(_directionalInput.x * HorizontalMovementForce, 0));
+        }
+    }
+
+    private void Jump(InputAction.CallbackContext context)
+    {
+        if(Grounded)
+            _rb.velocity = new Vector2(_rb.velocity.x, JumpSpeed);
     }
 
     private void OnEnable()
@@ -63,11 +74,16 @@ public class PlayerMovement : MonoBehaviour
         else
             _move = Inputs.Player.ArrowMove;    
         _move.Enable();
+
+        _jump = Inputs.Player.JumpWASD;
+        _jump.Enable();
+        _jump.performed += Jump;
     }
 
 
     private void OnDisable()
     {
         _move.Disable();
+        _jump.Disable();
     }
 }

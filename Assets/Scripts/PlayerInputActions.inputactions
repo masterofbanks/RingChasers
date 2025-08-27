@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "JumpWASD",
+                    "type": "Button",
+                    "id": "406e8476-0895-400c-b097-d1dad7fe3930",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -240,6 +249,17 @@
                     "action": "ArrowMove",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "0f7320c4-43ef-4890-87dd-6a416ae1666d",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "JumpWASD",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

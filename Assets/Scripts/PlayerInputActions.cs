@@ -62,6 +62,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""JumpWASD"",
+                    ""type"": ""Button"",
+                    ""id"": ""406e8476-0895-400c-b097-d1dad7fe3930"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -262,6 +271,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""ArrowMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0f7320c4-43ef-4890-87dd-6a416ae1666d"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""JumpWASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -851,6 +871,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_ArrowMove = m_Player.FindAction("ArrowMove", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+        m_Player_JumpWASD = m_Player.FindAction("JumpWASD", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -928,6 +949,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ArrowMove;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Fire;
+    private readonly InputAction m_Player_JumpWASD;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -936,6 +958,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @ArrowMove => m_Wrapper.m_Player_ArrowMove;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
+        public InputAction @JumpWASD => m_Wrapper.m_Player_JumpWASD;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -957,6 +980,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Fire.started += instance.OnFire;
             @Fire.performed += instance.OnFire;
             @Fire.canceled += instance.OnFire;
+            @JumpWASD.started += instance.OnJumpWASD;
+            @JumpWASD.performed += instance.OnJumpWASD;
+            @JumpWASD.canceled += instance.OnJumpWASD;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -973,6 +999,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Fire.started -= instance.OnFire;
             @Fire.performed -= instance.OnFire;
             @Fire.canceled -= instance.OnFire;
+            @JumpWASD.started -= instance.OnJumpWASD;
+            @JumpWASD.performed -= instance.OnJumpWASD;
+            @JumpWASD.canceled -= instance.OnJumpWASD;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1159,6 +1188,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnArrowMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
+        void OnJumpWASD(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
