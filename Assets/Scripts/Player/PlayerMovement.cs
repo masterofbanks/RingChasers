@@ -70,12 +70,18 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         if (WASD)
+        {
             _move = Inputs.Player.WASDMove;
-        else
-            _move = Inputs.Player.ArrowMove;    
-        _move.Enable();
+            _jump = Inputs.Player.JumpWASD;
 
-        _jump = Inputs.Player.JumpWASD;
+        }
+
+        else
+        {
+            _move = Inputs.Player.ArrowMove;
+            _jump = Inputs.Player.JumpArrows;
+        }
+        _move.Enable();
         _jump.Enable();
         _jump.performed += Jump;
     }
