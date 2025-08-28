@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Testing")]
     public bool Grounded;
     //true to use WASD; false to Use Arrows
-    public bool WASD; 
+    public bool Cat; 
 
     //componenets
     public PlayerInputActions Inputs;
@@ -29,6 +29,9 @@ public class PlayerMovement : MonoBehaviour
     //input actions
     private InputAction _move;
     private InputAction _jump;
+
+    //abilites
+    public bool _doubleJump;
     
     // Start is called before the first frame update
     void Start()
@@ -44,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Grounded = Physics2D.OverlapCircle(GroundCheckPosition.position, GroundCheckRadius, GroundMask);
+        //TestGrounded();
         MovePlayer();
 
 
@@ -61,15 +64,26 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void TestGrounded()
+    {
+        Grounded = Physics2D.OverlapCircle(GroundCheckPosition.position, GroundCheckRadius, GroundMask);
+        
+    }
+
     private void Jump(InputAction.CallbackContext context)
     {
         if(Grounded)
             _rb.velocity = new Vector2(_rb.velocity.x, JumpSpeed);
+        else if(Cat && _doubleJump)
+        {
+            _doubleJump = false;
+            _rb.velocity = new Vector2(_rb.velocity.x, JumpSpeed);
+        }
     }
 
     private void OnEnable()
     {
-        if (WASD)
+        if (Cat)
         {
             _move = Inputs.Player.WASDMove;
             _jump = Inputs.Player.JumpWASD;
