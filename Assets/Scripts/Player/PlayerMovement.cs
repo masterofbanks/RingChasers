@@ -11,11 +11,6 @@ public class PlayerMovement : MonoBehaviour
     public float HorizontalMovementForce;
     public float JumpSpeed;
 
-    [Header("Ground Check Values")]
-    public Transform GroundCheckPosition;
-    public float GroundCheckRadius;
-    public LayerMask GroundMask;
-
     [Header("Testing")]
     public bool Grounded;
     //true to use WASD; false to Use Arrows
@@ -64,11 +59,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void TestGrounded()
-    {
-        Grounded = Physics2D.OverlapCircle(GroundCheckPosition.position, GroundCheckRadius, GroundMask);
-        
-    }
+    
 
     private void Jump(InputAction.CallbackContext context)
     {
