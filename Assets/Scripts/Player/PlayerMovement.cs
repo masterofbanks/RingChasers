@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +17,10 @@ public class PlayerMovement : MonoBehaviour
         idle, running, jumping, crouching, crouchWalking, squeezed
     }
     public State state;
+    [Header("Tunnel Stuff")]
+    public float TunnelSpeed;
+    public float DelayGravityBuffer;
+    public float PushOutForce;
 
     [Header("Testing")]
     public bool Grounded;
@@ -28,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D _rb;
     private Animator anime;
     private Vector2 _directionalInput;
+    private float NormGravityScale;
 
     //input actions
     private InputAction _move;
@@ -41,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         anime = GetComponent<Animator>();
+        NormGravityScale = _rb.gravityScale;
     }
 
     private void Awake()
@@ -63,15 +70,26 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 rawInput = _move.ReadValue<Vector2>();
         _directionalInput = new Vector2(System.MathF.Sign(rawInput.x), System.MathF.Sign(rawInput.y));
-        if(Mathf.Abs(_rb.velocity.x) < MaxMovementSpeed)
+        if(Mathf.Abs(_rb.velocity.x) < MaxMovementSpeed && !InTunnel)
         {
             _rb.AddForce(new Vector2(_directionalInput.x * HorizontalMovementForce, 0));
+        }
+
+        else if (InTunnel)
+        {
+            _rb.velocity = _directionalInput * TunnelSpeed;
         }
     }
 
     private void StateController()
     {
-        if (Grounded)
+        if (InTunnel)
+        {
+            state = State.squeezed;
+        }
+        
+        
+        else if (Grounded)
         {
             if(Mathf.Abs(_rb.velocity.x) < MinSpeedToEnterIdle)
             {
@@ -105,15 +123,20 @@ public class PlayerMovement : MonoBehaviour
     }
     
 
+
     private void Jump(InputAction.CallbackContext context)
     {
-        if(Grounded)
-            _rb.velocity = new Vector2(_rb.velocity.x, JumpSpeed);
-        else if(Cat && _doubleJump)
+        if (!InTunnel)
         {
-            _doubleJump = false;
-            _rb.velocity = new Vector2(_rb.velocity.x, JumpSpeed);
+            if (Grounded && !InTunnel)
+                _rb.velocity = new Vector2(_rb.velocity.x, JumpSpeed);
+            else if (Cat && _doubleJump)
+            {
+                _doubleJump = false;
+                _rb.velocity = new Vector2(_rb.velocity.x, JumpSpeed);
+            }
         }
+        
     }
 
     private void OnEnable()
@@ -147,6 +170,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Tunnel"))
         {
             InTunnel = true;
+            _rb.gravityScale = 0;
         }
     }
 
@@ -155,6 +179,15 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Tunnel"))
         {
             InTunnel = false;
+            _rb.velocity = ShortenXComponent(_directionalInput * PushOutForce, 0.5f);
+            _rb.gravityScale = NormGravityScale;
         }
     }
+
+    private Vector2 ShortenXComponent(Vector2 vec, float k)
+    {
+        return new Vector2(k * vec.x, vec.y);
+    }
+
+    
 }
