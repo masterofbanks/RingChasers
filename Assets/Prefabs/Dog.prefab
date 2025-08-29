@@ -31,6 +31,87 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3517990745519345082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8035156195177221068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 85568628421746513}
+  - component: {fileID: 3411726622235411013}
+  - component: {fileID: 7792720910062129379}
+  m_Layer: 7
+  m_Name: GroundCircle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &85568628421746513
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8035156195177221068}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.001, y: -0.614707, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3517990745519345082}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &3411726622235411013
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8035156195177221068}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.14
+--- !u!114 &7792720910062129379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8035156195177221068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8059e90adaea3e94d858ee54da08025d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerMovementScript: {fileID: 7611243858603812453}
 --- !u!1 &8099786180166614181
 GameObject:
   m_ObjectHideFlags: 0
@@ -65,6 +146,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 85568628421746513}
   - {fileID: 6323999525091595026}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -132,16 +214,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f9f68697f2b3514488e58f8701518b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxMovementSpeed: 10
-  HorizontalMovementForce: 5
+  MaxMovementSpeed: 12
+  HorizontalMovementForce: 2
   JumpSpeed: 40
-  GroundCheckPosition: {fileID: 6323999525091595026}
-  GroundCheckRadius: 0.2
-  GroundMask:
-    serializedVersion: 2
-    m_Bits: 8
+  MinSpeedToEnterIdle: 1
+  state: 0
+  TunnelSpeed: 0
+  DelayGravityBuffer: 0
+  PushOutForce: 0
   Grounded: 0
-  WASD: 0
+  Cat: 0
+  InTunnel: 0
+  _doubleJump: 0
 --- !u!50 &3720005867624918205
 Rigidbody2D:
   serializedVersion: 4
@@ -184,7 +268,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
