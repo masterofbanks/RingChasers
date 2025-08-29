@@ -34,12 +34,14 @@ public class PlayerCameraBehavior : MonoBehaviour
             BoundBoxCollider.size = new Vector2(separationDistance, separationDistance);
 
         }
-
         AdjustCameraSize();
+
+
+
 
     }
 
-    
+
 
     private void AdjustCameraSize()
     {

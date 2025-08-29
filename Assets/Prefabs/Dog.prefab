@@ -214,18 +214,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f9f68697f2b3514488e58f8701518b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxMovementSpeed: 12
+  NormMaxMovementSpeed: 12
   HorizontalMovementForce: 2
   JumpSpeed: 40
   MinSpeedToEnterIdle: 1
   state: 0
+  _doubleJump: 0
   TunnelSpeed: 0
   DelayGravityBuffer: 0
   PushOutForce: 0
+  SprintSpeed: 24
+  StartingDrag: 3.12
+  SprintDrag: 1
   Grounded: 0
   Cat: 0
   InTunnel: 0
-  _doubleJump: 0
 --- !u!50 &3720005867624918205
 Rigidbody2D:
   serializedVersion: 4
