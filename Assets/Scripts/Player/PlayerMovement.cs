@@ -10,15 +10,23 @@ public class PlayerMovement : MonoBehaviour
     public float MaxMovementSpeed;
     public float HorizontalMovementForce;
     public float JumpSpeed;
+    public float MinSpeedToEnterIdle;
+    public enum State
+    {
+        idle, running, jumping, crouching, crouchWalking, squeezed
+    }
+    public State state;
 
     [Header("Testing")]
     public bool Grounded;
     //true to use WASD; false to Use Arrows
-    public bool Cat; 
+    public bool Cat;
+    public bool InTunnel;
 
     //componenets
     public PlayerInputActions Inputs;
     private Rigidbody2D _rb;
+    private Animator anime;
     private Vector2 _directionalInput;
 
     //input actions
@@ -32,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        anime = GetComponent<Animator>();
     }
 
     private void Awake()
@@ -44,7 +53,8 @@ public class PlayerMovement : MonoBehaviour
     {
         //TestGrounded();
         MovePlayer();
-
+        StateController();
+        anime.SetInteger("state", (int)state);
 
     }
 
@@ -59,6 +69,40 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void StateController()
+    {
+        if (Grounded)
+        {
+            if(Mathf.Abs(_rb.velocity.x) < MinSpeedToEnterIdle)
+            {
+                if(_directionalInput.y == -1 && Cat)
+                {
+                    state = State.crouching;
+                }
+
+                else
+                {
+                    state = State.idle;
+                }
+
+            }
+
+            else if(_directionalInput.y == -1 && Cat)
+            {
+                state = State.crouchWalking;
+            }
+            else
+            {
+                state = State.running;
+            }
+        }
+
+
+        else
+        {
+            state = State.jumping;
+        }
+    }
     
 
     private void Jump(InputAction.CallbackContext context)
@@ -96,5 +140,21 @@ public class PlayerMovement : MonoBehaviour
     {
         _move.Disable();
         _jump.Disable();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Tunnel"))
+        {
+            InTunnel = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Tunnel"))
+        {
+            InTunnel = false;
+        }
     }
 }
