@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,14 +10,17 @@ public class PlayerCameraBehavior : MonoBehaviour
     public GameObject Dog;
 
     public float MinDistance;
+    public float Padding;
     public float VerticalOffset;
     private BoxCollider2D BoundBoxCollider;
+    private CinemachineVirtualCamera cam;
     
     // Start is called before the first frame update
     void Start()
     {
         BoundBoxCollider = BoundingBox.GetComponent<BoxCollider2D>();
         BoundBoxCollider.size = new Vector2(MinDistance, MinDistance);
+        cam = GetComponent<CinemachineVirtualCamera>();
     }
 
     // Update is called once per frame
@@ -31,5 +35,23 @@ public class PlayerCameraBehavior : MonoBehaviour
 
         }
 
+        AdjustCameraSize();
+
     }
+
+    
+
+    private void AdjustCameraSize()
+    {
+        cam.gameObject.transform.position = new Vector3(BoundingBox.transform.position.x, BoundingBox.transform.position.y, -10);
+        if (BoundBoxCollider.size.x > BoundBoxCollider.size.y * cam.m_Lens.Aspect)
+            cam.m_Lens.OrthographicSize = BoundBoxCollider.size.x / (float)Camera.main.pixelWidth * Camera.main.pixelHeight;
+        else
+            cam.m_Lens.OrthographicSize = BoundBoxCollider.size.y;
+
+        cam.m_Lens.OrthographicSize /= 2;
+        cam.m_Lens.OrthographicSize += Padding;
+    }
+
+
 }
