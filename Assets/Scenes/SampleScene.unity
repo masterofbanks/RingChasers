@@ -1732,6 +1732,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3720005867624918205, guid: e84722cab895dc743a85546d31acb256, type: 3}
+      propertyPath: m_LinearDrag
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3720005867624918205, guid: e84722cab895dc743a85546d31acb256, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
       value: 0
       objectReference: {fileID: 0}
@@ -1758,6 +1762,10 @@ PrefabInstance:
     - target: {fileID: 7611243858603812453, guid: e84722cab895dc743a85546d31acb256, type: 3}
       propertyPath: NormMaxMovementSpeed
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7611243858603812453, guid: e84722cab895dc743a85546d31acb256, type: 3}
+      propertyPath: HorizontalMovementForce
+      value: 17.5
       objectReference: {fileID: 0}
     - target: {fileID: 7611243858603812453, guid: e84722cab895dc743a85546d31acb256, type: 3}
       propertyPath: DecreaseSprintTimeScaler
@@ -2404,6 +2412,10 @@ PrefabInstance:
     - target: {fileID: 408499675296977786, guid: 091da5a4ee7704340a2d9891d345b461, type: 3}
       propertyPath: NormMaxMovementSpeed
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 408499675296977786, guid: 091da5a4ee7704340a2d9891d345b461, type: 3}
+      propertyPath: HorizontalMovementForce
+      value: 22.5
       objectReference: {fileID: 0}
     - target: {fileID: 1595040407652311300, guid: 091da5a4ee7704340a2d9891d345b461, type: 3}
       propertyPath: m_LocalPosition.x
