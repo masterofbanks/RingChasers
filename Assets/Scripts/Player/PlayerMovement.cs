@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public State state;
     [Header("Cat Stuff")]
-    public bool _doubleJump;
+    public bool DoubleJump;
     public float TunnelSpeed;
     public float DelayGravityBuffer;
     public float PushOutForce;
@@ -28,6 +28,8 @@ public class PlayerMovement : MonoBehaviour
     public float StartingDrag;
     public float SprintDrag;
     public float KickDogAmount;
+    public bool DownwardBoost;
+    public bool Slamming;
 
     [Header("Testing")]
     public bool Grounded;
@@ -47,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
     //input actions
     private InputAction _move;
     private InputAction _jump;
+    private InputAction _downwardBoostAction;
 
     //abilites
     
@@ -155,13 +158,23 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Grounded && !InTunnel)
                 _rb.velocity = new Vector2(_rb.velocity.x, JumpSpeed);
-            else if (Cat && _doubleJump)
+            else if (Cat && DoubleJump)
             {
-                _doubleJump = false;
+                DoubleJump = false;
                 _rb.velocity = new Vector2(_rb.velocity.x, JumpSpeed);
             }
         }
         
+    }
+
+    private void PerformDownwardBoost(InputAction.CallbackContext context)
+    {
+        if (DownwardBoost && !Cat)
+        {
+            DownwardBoost = false;
+            Slamming = true;
+            _rb.velocity = new Vector2(_rb.velocity.x, -JumpSpeed);
+        }
     }
 
     private void Flip()
@@ -193,9 +206,13 @@ public class PlayerMovement : MonoBehaviour
             _move = Inputs.Player.ArrowMove;
             _jump = Inputs.Player.JumpArrows;
         }
+        _downwardBoostAction = Inputs.Player.DownBoost;
+
         _move.Enable();
         _jump.Enable();
+        _downwardBoostAction.Enable();
         _jump.performed += Jump;
+        _downwardBoostAction.performed += PerformDownwardBoost;
     }
 
 

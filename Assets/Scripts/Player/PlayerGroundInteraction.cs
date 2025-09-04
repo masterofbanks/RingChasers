@@ -12,8 +12,27 @@ public class PlayerGroundInteraction : MonoBehaviour
         if (collision.gameObject.CompareTag("Terrain"))
         {
             PlayerMovementScript.Grounded = true;
-            PlayerMovementScript._doubleJump = true;
+            PlayerMovementScript.DoubleJump = true;
+            PlayerMovementScript.DownwardBoost = true;
+            PlayerMovementScript.Slamming = false;
         }
+
+        else if (collision.gameObject.CompareTag("Destroyable"))
+        {
+            if (PlayerMovementScript.Slamming)
+            {
+                Destroy(collision.gameObject);
+            }
+
+            else
+            {
+                PlayerMovementScript.Grounded = true;
+                PlayerMovementScript.DoubleJump = true;
+                PlayerMovementScript.DownwardBoost = true;
+            }
+            Debug.Log($"Something destroyable is beneath {transform.parent.name}");
+        }
+        
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -21,6 +40,13 @@ public class PlayerGroundInteraction : MonoBehaviour
         if (collision.gameObject.CompareTag("Terrain")){
             PlayerMovementScript.Grounded = false;
         }
+
+        else if(collision.gameObject.CompareTag("Destroyable") && !PlayerMovementScript.Slamming)
+        {
+            PlayerMovementScript.Grounded = false;
+        }
     }
+
+    
 
 }

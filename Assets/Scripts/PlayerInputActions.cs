@@ -80,6 +80,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DownBoost"",
+                    ""type"": ""Button"",
+                    ""id"": ""47f1f885-f175-417f-8351-6b4b8617474b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -300,6 +309,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""JumpArrows"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c8d38e40-2a0a-47e7-b3f5-3331fe0cb5bf"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DownBoost"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -893,6 +913,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_JumpWASD = m_Player.FindAction("JumpWASD", throwIfNotFound: true);
         m_Player_JumpArrows = m_Player.FindAction("JumpArrows", throwIfNotFound: true);
+        m_Player_DownBoost = m_Player.FindAction("DownBoost", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -972,6 +993,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_JumpWASD;
     private readonly InputAction m_Player_JumpArrows;
+    private readonly InputAction m_Player_DownBoost;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -982,6 +1004,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @JumpWASD => m_Wrapper.m_Player_JumpWASD;
         public InputAction @JumpArrows => m_Wrapper.m_Player_JumpArrows;
+        public InputAction @DownBoost => m_Wrapper.m_Player_DownBoost;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1009,6 +1032,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @JumpArrows.started += instance.OnJumpArrows;
             @JumpArrows.performed += instance.OnJumpArrows;
             @JumpArrows.canceled += instance.OnJumpArrows;
+            @DownBoost.started += instance.OnDownBoost;
+            @DownBoost.performed += instance.OnDownBoost;
+            @DownBoost.canceled += instance.OnDownBoost;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1031,6 +1057,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @JumpArrows.started -= instance.OnJumpArrows;
             @JumpArrows.performed -= instance.OnJumpArrows;
             @JumpArrows.canceled -= instance.OnJumpArrows;
+            @DownBoost.started -= instance.OnDownBoost;
+            @DownBoost.performed -= instance.OnDownBoost;
+            @DownBoost.canceled -= instance.OnDownBoost;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1219,6 +1248,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnJumpWASD(InputAction.CallbackContext context);
         void OnJumpArrows(InputAction.CallbackContext context);
+        void OnDownBoost(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
