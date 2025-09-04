@@ -27,6 +27,10 @@ public class PlayerMovement : MonoBehaviour
     public float SprintSpeed;
     public float StartingDrag;
     public float SprintDrag;
+    public float SprintTime;
+    public float DecreaseSprintTimeScaler;
+    public float IncreaseSprintTimeScaler;
+    public float SprintCounter;
     public float KickDogAmount;
     public bool DownwardBoost;
     public bool Slamming;
@@ -43,7 +47,6 @@ public class PlayerMovement : MonoBehaviour
     private Animator anime;
     private Vector2 _directionalInput;
     private float _normGravityScale;
-    private float _linearDrag;
     private bool _facingRight;
 
     //input actions
@@ -65,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
         _maxRunningSpeed = NormMaxMovementSpeed;
         _rb.drag = StartingDrag;
         _facingRight = true;
+        SprintCounter = SprintTime;
     }
 
     private void Awake()
@@ -126,11 +130,19 @@ public class PlayerMovement : MonoBehaviour
             {
                 if(Cat)
                     state = State.crouchWalking;
-                else
+                else if(SprintCounter > 0)
                 {
                     state = State.sprinting;
                     _maxRunningSpeed = SprintSpeed;
                     _rb.drag = SprintDrag;
+                    SprintCounter -=  DecreaseSprintTimeScaler * Time.deltaTime;
+                }
+                else
+                {
+                    SprintCounter = 0;
+                    state = State.running;
+                    _maxRunningSpeed = NormMaxMovementSpeed;
+                    _rb.drag = StartingDrag;
                 }
             }
             else
@@ -138,10 +150,16 @@ public class PlayerMovement : MonoBehaviour
                 state = State.running;
                 _maxRunningSpeed = NormMaxMovementSpeed;
                 _rb.drag = StartingDrag;
+                
             }
         }
 
-        
+        if (SprintCounter < SprintTime)
+        {
+            SprintCounter += IncreaseSprintTimeScaler * Time.deltaTime;
+        }
+
+
 
 
         else
